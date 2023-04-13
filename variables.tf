@@ -180,7 +180,7 @@ variable "outpost_arn" {
     AWS Outpost ARN . Overrides `availability_zones_ids`.
     Used when creating subnets on specific AWS Outpost hardware.
     EOT
-  default     = []
+  default     = null
 }
 
 variable "availability_zone_attribute_style" {
