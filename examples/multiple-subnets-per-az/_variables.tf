@@ -3,6 +3,11 @@ variable "availability_zones" {
   description = "List of Availability Zones where subnets will be created"
 }
 
+variable "vpc_cidr_block" {
+  type        = string
+  description = "CIDR block for the VPC"
+}
+
 variable "subnets_per_az_count" {
   type        = number
   description = <<-EOT
