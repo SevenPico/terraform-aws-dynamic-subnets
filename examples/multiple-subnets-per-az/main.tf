@@ -1,7 +1,3 @@
-provider "aws" {
-  region = var.region
-}
-
 module "vpc" {
   source  = "SevenPico/vpc/aws"
   version = "3.0.0"
