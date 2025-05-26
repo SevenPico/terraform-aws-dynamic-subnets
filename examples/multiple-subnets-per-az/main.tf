@@ -1,6 +1,6 @@
 module "vpc" {
-  source  = "SevenPico/vpc/aws"
-  version = "3.0.0"
+  source  = "registry.terraform.io/SevenPico/vpc/aws"
+  version = "3.0.1"
   context = module.context.self
   enabled = module.context.enabled
 
