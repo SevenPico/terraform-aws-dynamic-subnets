@@ -639,35 +639,3 @@ variable "nat_gateway_public_subnet_names" {
   default     = null
   nullable    = true
 }
-
-# Legacy variables for backward compatibility - these are referenced in the locals but may not be defined
-variable "aws_route_create_timeout" {
-  type        = string
-  description = "DEPRECATED: Use `route_create_timeout` instead"
-  default     = null
-}
-
-variable "aws_route_delete_timeout" {
-  type        = string
-  description = "DEPRECATED: Use `route_delete_timeout` instead"
-  default     = null
-}
-
-variable "root_block_device_encrypted" {
-  type        = bool
-  description = "DEPRECATED: Use `nat_instance_root_block_device_encrypted` instead"
-  default     = null
-}
-
-# Variables that might be referenced in public.tf for subnet type tagging
-variable "subnet_type_tag_key" {
-  type        = string
-  description = "Key for subnet type tag applied to subnets"
-  default     = null
-}
-
-variable "subnet_type_tag_value_format" {
-  type        = string
-  description = "Format string for subnet type tag value. Receives subnet type as argument"
-  default     = null
-}
