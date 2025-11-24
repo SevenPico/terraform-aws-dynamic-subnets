@@ -43,6 +43,7 @@ variable "max_subnet_count" {
     If Outpost ARN is set, then this number should be set to the number of Subnets needed on the Outpost Hardware.
     EOT
   default     = 0
+  nullable    = false
 }
 
 variable "max_nats" {
@@ -52,13 +53,15 @@ variable "max_nats" {
     Set to 1 or 2 for cost savings at the expense of availability.
     EOT
   # Default should be MAX_INT, but Terraform does not provide that. 999 is big enough.
-  default = 999
+  default  = 999
+  nullable = false
 }
 
 variable "private_subnets_enabled" {
   type        = bool
   description = "If false, do not create private subnets (or NAT gateways or instances)"
   default     = true
+  nullable    = false
 }
 
 variable "public_subnets_enabled" {
@@ -68,30 +71,35 @@ variable "public_subnets_enabled" {
     Since NAT gateways and instances must be created in public subnets, these will also not be created when `false`.
     EOT
   default     = true
+  nullable    = false
 }
 
 variable "private_label" {
   type        = string
   description = "The string to use in IDs and elsewhere to identify resources for the private subnets and distinguish them from resources for the public subnets"
   default     = "private"
+  nullable    = false
 }
 
 variable "public_label" {
   type        = string
   description = "The string to use in IDs and elsewhere to identify resources for the public subnets and distinguish them from resources for the private subnets"
   default     = "public"
+  nullable    = false
 }
 
 variable "ipv4_enabled" {
   type        = bool
   description = "Set `true` to enable IPv4 addresses in the subnets"
   default     = true
+  nullable    = false
 }
 
 variable "ipv6_enabled" {
   type        = bool
   description = "Set `true` to enable IPv6 addresses in the subnets"
   default     = false
+  nullable    = false
 }
 
 variable "ipv4_cidr_block" {
@@ -101,6 +109,7 @@ variable "ipv4_cidr_block" {
     If no CIDR block is provided, the VPC's default IPv4 CIDR block will be used.
     EOT
   default     = []
+  nullable    = false
   validation {
     condition     = length(var.ipv4_cidr_block) < 2
     error_message = "Only 1 ipv4_cidr_block can be provided. Use ipv4_cidrs to provide a CIDR per subnet."
@@ -114,6 +123,7 @@ variable "ipv6_cidr_block" {
     Ignored if `ipv6_cidrs` is set. If no CIDR block is provided, the VPC's default IPv6 CIDR block will be used.
     EOT
   default     = []
+  nullable    = false
   validation {
     condition     = length(var.ipv6_cidr_block) < 2
     error_message = "Only 1 ipv6_cidr_block can be provided. Use ipv6_cidrs to provide a CIDR per subnet."
@@ -130,6 +140,7 @@ variable "ipv4_cidrs" {
     Lists may contain more CIDRs than needed.
     EOT
   default     = []
+  nullable    = false
   validation {
     condition     = length(var.ipv4_cidrs) < 2
     error_message = "Only 1 ipv4_cidrs object can be provided. Lists of CIDRs are passed via the `public` and `private` attributes of the single object."
@@ -146,6 +157,7 @@ variable "ipv6_cidrs" {
     Lists may contain more CIDRs than needed.
     EOT
   default     = []
+  nullable    = false
   validation {
     condition     = length(var.ipv6_cidrs) < 2
     error_message = "Only 1 ipv6_cidrs object can be provided. Lists of CIDRs are passed via the `public` and `private` attributes of the single object."
@@ -163,6 +175,7 @@ variable "availability_zones" {
     (not computed) values for predictability, consistency, and stability.
     EOT
   default     = []
+  nullable    = false
 }
 
 variable "availability_zone_ids" {
@@ -172,6 +185,7 @@ variable "availability_zone_ids" {
     Useful in some regions when using only some AZs and you want to use the same ones across multiple accounts.
     EOT
   default     = []
+  nullable    = false
 }
 
 variable "outpost_arn" {
@@ -185,11 +199,12 @@ variable "outpost_arn" {
 
 variable "availability_zone_attribute_style" {
   type        = string
-  default     = "short"
   description = <<-EOT
     The style of Availability Zone code to use in tags and names. One of `full`, `short`, or `fixed`.
     When using `availability_zone_ids`, IDs will first be translated into AZ names.
     EOT
+  default     = "short"
+  nullable    = false
 }
 
 variable "nat_gateway_enabled" {
@@ -214,24 +229,28 @@ variable "nat_elastic_ips" {
   type        = list(string)
   description = "Existing Elastic IPs (not EIP IDs) to attach to the NAT Gateway(s) or Instance(s) instead of creating new ones."
   default     = []
+  nullable    = false
 }
 
 variable "map_public_ip_on_launch" {
   type        = bool
   description = "If `true`, instances launched into a public subnet will be assigned a public IPv4 address"
   default     = true
+  nullable    = false
 }
 
 variable "private_assign_ipv6_address_on_creation" {
   type        = bool
   description = "If `true`, network interfaces created in a private subnet will be assigned an IPv6 address"
   default     = true
+  nullable    = false
 }
 
 variable "public_assign_ipv6_address_on_creation" {
   type        = bool
   description = "If `true`, network interfaces created in a public subnet will be assigned an IPv6 address"
   default     = true
+  nullable    = false
 }
 
 variable "private_dns64_nat64_enabled" {
@@ -253,6 +272,7 @@ variable "public_dns64_nat64_enabled" {
     Requires `nat_gateway_enabled` and `public_route_table_enabled` to be `true` to be fully operational.
     EOT
   default     = false
+  nullable    = false
 }
 
 variable "ipv4_private_instance_hostname_type" {
@@ -263,12 +283,14 @@ variable "ipv4_private_instance_hostname_type" {
     `resource-name` to generate it from the instance ID.
     EOT
   default     = "ip-name"
+  nullable    = false
 }
 
 variable "ipv4_private_instance_hostnames_enabled" {
   type        = bool
   description = "If `true`, DNS queries for instance hostnames in the private subnets will be answered with A (IPv4) records."
   default     = false
+  nullable    = false
 }
 
 variable "ipv6_private_instance_hostnames_enabled" {
@@ -277,6 +299,7 @@ variable "ipv6_private_instance_hostnames_enabled" {
     If `true` (or if `ipv4_enabled` is `false`), DNS queries for instance hostnames in the private subnets will be answered with AAAA (IPv6) records.
     EOT
   default     = false
+  nullable    = false
 }
 
 variable "ipv4_public_instance_hostname_type" {
@@ -287,12 +310,14 @@ variable "ipv4_public_instance_hostname_type" {
     `resource-name` to generate it from the instance ID.
     EOT
   default     = "ip-name"
+  nullable    = false
 }
 
 variable "ipv4_public_instance_hostnames_enabled" {
   type        = bool
   description = "If `true`, DNS queries for instance hostnames in the public subnets will be answered with A (IPv4) records."
   default     = false
+  nullable    = false
 }
 
 variable "ipv6_public_instance_hostnames_enabled" {
@@ -301,6 +326,7 @@ variable "ipv6_public_instance_hostnames_enabled" {
     If `true` (or if `ipv4_enabled` is false), DNS queries for instance hostnames in the public subnets will be answered with AAAA (IPv6) records.
     EOT
   default     = false
+  nullable    = false
 }
 
 variable "private_open_network_acl_enabled" {
@@ -312,6 +338,7 @@ variable "private_open_network_acl_enabled" {
     If `false`, you will need to manage the network ACL outside of this module.
     EOT
   default     = true
+  nullable    = false
 }
 
 variable "public_open_network_acl_enabled" {
@@ -323,18 +350,21 @@ variable "public_open_network_acl_enabled" {
     If `false`, you will need to manage the network ACL outside of this module.
     EOT
   default     = true
+  nullable    = false
 }
 
 variable "open_network_acl_ipv4_rule_number" {
   type        = number
   description = "The `rule_no` assigned to the network ACL rules for IPv4 traffic generated by this module"
   default     = 100
+  nullable    = false
 }
 
 variable "open_network_acl_ipv6_rule_number" {
   type        = number
   description = "The `rule_no` assigned to the network ACL rules for IPv6 traffic generated by this module"
   default     = 111
+  nullable    = false
 }
 
 variable "private_route_table_enabled" {
@@ -344,6 +374,7 @@ variable "private_route_table_enabled" {
     will be created for each private subnet (1:1). If false, you will need to create your own route table(s) and route(s).
     EOT
   default     = true
+  nullable    = false
 }
 
 variable "public_route_table_ids" {
@@ -357,6 +388,7 @@ variable "public_route_table_ids" {
     according to the setting of `public_route_table_per_subnet_enabled`.
     EOT
   default     = []
+  nullable    = false
 }
 
 variable "public_route_table_enabled" {
@@ -368,6 +400,7 @@ variable "public_route_table_enabled" {
     Ignored if `public_route_table_ids` is non-empty.
     EOT
   default     = true
+  nullable    = false
 }
 
 variable "public_route_table_per_subnet_enabled" {
@@ -382,42 +415,44 @@ variable "public_route_table_per_subnet_enabled" {
 
 variable "route_create_timeout" {
   type        = string
-  description = "Time to wait for a network routing table entry to be created, specified as a Go Duration, e.g. `2m`"
-  default     = "5m"
+  description = "Time to wait for a network routing table entry to be created, specified as a Go Duration, e.g. `2m`. Use `null` for proivder default."
+  default     = null
 }
 locals { route_create_timeout = var.aws_route_create_timeout == null ? var.route_create_timeout : var.aws_route_create_timeout }
 
 variable "route_delete_timeout" {
   type        = string
-  description = "Time to wait for a network routing table entry to be deleted, specified as a Go Duration, e.g. `2m`"
-  default     = "10m"
+  description = "Time to wait for a network routing table entry to be deleted, specified as a Go Duration, e.g. `2m`. Use `null` for proivder default."
+  default     = null
 }
 locals { route_delete_timeout = var.aws_route_delete_timeout == null ? var.route_delete_timeout : var.aws_route_delete_timeout }
 
 variable "subnet_create_timeout" {
   type        = string
-  description = "Time to wait for a subnet to be created, specified as a Go Duration, e.g. `2m`"
+  description = "Time to wait for a subnet to be created, specified as a Go Duration, e.g. `2m`. Use `null` for proivder default."
   # 10m is the AWS Provider's default value
-  default = "10m"
+  default = null
 }
 
 variable "subnet_delete_timeout" {
   type        = string
-  description = "Time to wait for a subnet to be deleted, specified as a Go Duration, e.g. `5m`"
+  description = "Time to wait for a subnet to be deleted, specified as a Go Duration, e.g. `5m`. Use `null` for proivder default."
   # 20m is the AWS Provider's default value
-  default = "20m"
+  default = null
 }
 
 variable "private_subnets_additional_tags" {
   type        = map(string)
   description = "Additional tags to be added to private subnets"
   default     = {}
+  nullable    = false
 }
 
 variable "public_subnets_additional_tags" {
   type        = map(string)
   description = "Additional tags to be added to public subnets"
   default     = {}
+  nullable    = false
 }
 
 ############## NAT instance configuration ###################
@@ -425,6 +460,7 @@ variable "nat_instance_type" {
   type        = string
   description = "NAT Instance type"
   default     = "t3.micro"
+  nullable    = false
 }
 
 variable "nat_instance_ami_id" {
@@ -436,6 +472,7 @@ variable "nat_instance_ami_id" {
     does not support NAT64. Use of a NAT gateway is recommended instead.
     EOT
   default     = []
+  nullable    = false
   validation {
     condition     = length(var.nat_instance_ami_id) < 2
     error_message = "Only 1 NAT Instance AMI ID can be provided."
@@ -449,6 +486,7 @@ variable "nat_instance_cpu_credits_override" {
     T3 and later instances are launched as unlimited by default. T2 instances are launched as standard by default.
     EOT
   default     = ""
+  nullable    = false
 
   validation {
     condition = contains(["standard", "unlimited", ""], var.nat_instance_cpu_credits_override)
@@ -462,24 +500,28 @@ variable "metadata_http_endpoint_enabled" {
   type        = bool
   description = "Whether the metadata service is available on the created NAT instances"
   default     = true
+  nullable    = false
 }
 
 variable "metadata_http_put_response_hop_limit" {
   type        = number
   description = "The desired HTTP PUT response hop limit (between 1 and 64) for instance metadata requests on the created NAT instances"
   default     = 1
+  nullable    = false
 }
 
 variable "metadata_http_tokens_required" {
   type        = bool
   description = "Whether or not the metadata service requires session tokens, also referred to as Instance Metadata Service Version 2, on the created NAT instances"
   default     = true
+  nullable    = false
 }
 
 variable "nat_instance_root_block_device_encrypted" {
   type        = bool
   description = "Whether to encrypt the root block device on the created NAT instances"
   default     = true
+  nullable    = false
 }
 locals { nat_instance_root_block_device_encrypted = var.root_block_device_encrypted == null ? var.nat_instance_root_block_device_encrypted : var.root_block_device_encrypted }
 
@@ -489,6 +531,7 @@ variable "subnets_per_az_count" {
     The number of subnet of each type (public or private) to provision per Availability Zone.
     EOT
   default     = 1
+  nullable    = false
 
   validation {
     condition = var.subnets_per_az_count > 0
@@ -508,4 +551,123 @@ variable "subnets_per_az_names" {
     `named_private_route_table_ids_map` and `named_public_route_table_ids_map`
     EOT
   default     = ["common"]
+  nullable    = false
+}
+
+variable "public_subnets_per_az_count" {
+  type        = number
+  description = <<-EOT
+    The number of public subnets to provision per Availability Zone.
+    If not provided, defaults to the value of `subnets_per_az_count` for backward compatibility.
+    Set this to create a different number of public subnets than private subnets.
+    EOT
+  default     = null
+  validation {
+    condition     = var.public_subnets_per_az_count == null || var.public_subnets_per_az_count > 0
+    error_message = "The `public_subnets_per_az_count` value must be greater than 0 or null."
+  }
+}
+
+variable "public_subnets_per_az_names" {
+  type        = list(string)
+  description = <<-EOT
+    The names to assign to the public subnets per Availability Zone.
+    If not provided, defaults to the value of `subnets_per_az_names` for backward compatibility.
+    If provided, the length must match `public_subnets_per_az_count`.
+    The names will be used as keys in the outputs `named_public_subnets_map` and `named_public_route_table_ids_map`.
+    EOT
+  default     = null
+  nullable    = true
+}
+
+variable "private_subnets_per_az_count" {
+  type        = number
+  description = <<-EOT
+    The number of private subnets to provision per Availability Zone.
+    If not provided, defaults to the value of `subnets_per_az_count` for backward compatibility.
+    Set this to create a different number of private subnets than public subnets.
+    EOT
+  default     = null
+  validation {
+    condition     = var.private_subnets_per_az_count == null || var.private_subnets_per_az_count > 0
+    error_message = "The `private_subnets_per_az_count` value must be greater than 0 or null."
+  }
+}
+
+variable "private_subnets_per_az_names" {
+  type        = list(string)
+  description = <<-EOT
+    The names to assign to the private subnets per Availability Zone.
+    If not provided, defaults to the value of `subnets_per_az_names` for backward compatibility.
+    If provided, the length must match `private_subnets_per_az_count`.
+    The names will be used as keys in the outputs `named_private_subnets_map` and `named_private_route_table_ids_map`.
+    EOT
+  default     = null
+  nullable    = true
+}
+
+variable "nat_gateway_public_subnet_indices" {
+  type        = list(number)
+  description = <<-EOT
+    The index (starting from 0) of the public subnet in each AZ to place the NAT Gateway.
+    If you have multiple public subnets per AZ (via `public_subnets_per_az_count`), this determines which one gets the NAT Gateway.
+    Default: `[0]` (use the first public subnet in each AZ).
+    You can specify multiple indices if you want redundant NATs within an AZ, but this is rarely needed and increases cost.
+    Cannot be used together with `nat_gateway_public_subnet_names`.
+    Example: `[0]` creates 1 NAT per AZ in the first public subnet.
+    Example: `[0, 1]` creates 2 NATs per AZ in the first and second public subnets (expensive).
+    EOT
+  default     = [0]
+  nullable    = false
+  validation {
+    condition     = length(var.nat_gateway_public_subnet_indices) > 0
+    error_message = "The `nat_gateway_public_subnet_indices` must contain at least one index."
+  }
+}
+
+variable "nat_gateway_public_subnet_names" {
+  type        = list(string)
+  description = <<-EOT
+    The names of the public subnets in each AZ where NAT Gateways should be placed.
+    Uses the names from `public_subnets_per_az_names` to determine placement.
+    This is more intuitive than using indices - specify the subnet by name instead of position.
+    Cannot be used together with `nat_gateway_public_subnet_indices` (only use indices OR names, not both).
+    If not specified, defaults to using `nat_gateway_public_subnet_indices`.
+    Example: `["loadbalancer"]` creates 1 NAT per AZ in the "loadbalancer" subnet.
+    Example: `["loadbalancer", "web"]` creates 2 NATs per AZ in "loadbalancer" and "web" subnets (expensive).
+    EOT
+  default     = null
+  nullable    = true
+}
+
+# Legacy variables for backward compatibility - these are referenced in the locals but may not be defined
+variable "aws_route_create_timeout" {
+  type        = string
+  description = "DEPRECATED: Use `route_create_timeout` instead"
+  default     = null
+}
+
+variable "aws_route_delete_timeout" {
+  type        = string
+  description = "DEPRECATED: Use `route_delete_timeout` instead"
+  default     = null
+}
+
+variable "root_block_device_encrypted" {
+  type        = bool
+  description = "DEPRECATED: Use `nat_instance_root_block_device_encrypted` instead"
+  default     = null
+}
+
+# Variables that might be referenced in public.tf for subnet type tagging
+variable "subnet_type_tag_key" {
+  type        = string
+  description = "Key for subnet type tag applied to subnets"
+  default     = null
+}
+
+variable "subnet_type_tag_value_format" {
+  type        = string
+  description = "Format string for subnet type tag value. Receives subnet type as argument"
+  default     = null
 }
