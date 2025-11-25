@@ -562,10 +562,6 @@ variable "public_subnets_per_az_count" {
     Set this to create a different number of public subnets than private subnets.
     EOT
   default     = null
-  validation {
-    condition     = var.public_subnets_per_az_count == null || var.public_subnets_per_az_count > 0
-    error_message = "The `public_subnets_per_az_count` value must be greater than 0 or null."
-  }
 }
 
 variable "public_subnets_per_az_names" {
@@ -588,10 +584,6 @@ variable "private_subnets_per_az_count" {
     Set this to create a different number of private subnets than public subnets.
     EOT
   default     = null
-  validation {
-    condition     = var.private_subnets_per_az_count == null || var.private_subnets_per_az_count > 0
-    error_message = "The `private_subnets_per_az_count` value must be greater than 0 or null."
-  }
 }
 
 variable "private_subnets_per_az_names" {
