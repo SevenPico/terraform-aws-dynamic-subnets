@@ -12,10 +12,10 @@ module "private_label" {
 }
 
 resource "aws_subnet" "private" {
-  count = local.private_enabled ? local.subnet_az_count : 0
+  count = local.private_enabled ? local.private_subnet_az_count : 0
 
   vpc_id            = local.vpc_id
-  availability_zone = local.subnet_availability_zones[count.index]
+  availability_zone = local.private_subnet_availability_zones[count.index]
   outpost_arn       = var.outpost_arn
 
   cidr_block      = local.private4_enabled ? local.ipv4_private_subnet_cidrs[count.index] : null
@@ -25,7 +25,7 @@ resource "aws_subnet" "private" {
   tags = merge(
     module.private_label.tags,
     {
-      "Name" = format("%s%s%s", module.private_label.id, local.delimiter, local.subnet_az_abbreviations[count.index])
+      "Name" = format("%s%s%s", module.private_label.id, local.delimiter, local.private_subnet_az_abbreviations[count.index])
     }
   )
 
@@ -58,7 +58,7 @@ resource "aws_route_table" "private" {
   tags = merge(
     module.private_label.tags,
     {
-      "Name" = format("%s%s%s", module.private_label.id, local.delimiter, local.subnet_az_abbreviations[count.index])
+      "Name" = format("%s%s%s", module.private_label.id, local.delimiter, local.private_subnet_az_abbreviations[count.index])
     }
   )
 }
@@ -77,7 +77,7 @@ resource "aws_route" "private6" {
 }
 
 resource "aws_route_table_association" "private" {
-  count = local.private_route_table_enabled ? local.subnet_az_count : 0
+  count = local.private_route_table_enabled ? local.private_subnet_az_count : 0
 
   subnet_id = aws_subnet.private[count.index].id
   # Use element() to "wrap around" and allow for a single table to be associated with all subnets
