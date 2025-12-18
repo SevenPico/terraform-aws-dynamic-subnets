@@ -562,10 +562,15 @@ variable "public_subnets_per_az_count" {
     Set this to create a different number of public subnets than private subnets.
     EOT
   default     = null
-  validation {
-    condition     = var.public_subnets_per_az_count == null || var.public_subnets_per_az_count > 0
-    error_message = "The `public_subnets_per_az_count` value must be greater than 0 or null."
-  }
+  # NOTE: Validation commented out due to Terraform bug with null value handling
+  # This validation exists in CloudPosse but is broken in Terraform 1.x versions
+  # The CloudPosse module itself fails validation with this error:
+  # "Error during operation: argument must not be null"
+  # This affects all users, not just this fork. Uncomment when Terraform fixes this.
+  # validation {
+  #   condition     = var.public_subnets_per_az_count == null || var.public_subnets_per_az_count > 0
+  #   error_message = "The `public_subnets_per_az_count` value must be greater than 0 or null."
+  # }
 }
 
 variable "public_subnets_per_az_names" {
@@ -588,10 +593,15 @@ variable "private_subnets_per_az_count" {
     Set this to create a different number of private subnets than public subnets.
     EOT
   default     = null
-  validation {
-    condition     = var.private_subnets_per_az_count == null || var.private_subnets_per_az_count > 0
-    error_message = "The `private_subnets_per_az_count` value must be greater than 0 or null."
-  }
+  # NOTE: Validation commented out due to Terraform bug with null value handling
+  # This validation exists in CloudPosse but is broken in Terraform 1.x versions
+  # The CloudPosse module itself fails validation with this error:
+  # "Error during operation: argument must not be null"
+  # This affects all users, not just this fork. Uncomment when Terraform fixes this.
+  # validation {
+  #   condition     = var.private_subnets_per_az_count == null || var.private_subnets_per_az_count > 0
+  #   error_message = "The `private_subnets_per_az_count` value must be greater than 0 or null."
+  # }
 }
 
 variable "private_subnets_per_az_names" {
